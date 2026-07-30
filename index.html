@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="bn"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JFT & SSW Models Questions</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+input, textarea{-webkit-user-select:text;user-select:text}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#f2f2f2;color:#222;padding-bottom:30px}
+
+.topbar{background:#e2136e;color:#fff;padding:14px 16px 12px;position:sticky;top:0;z-index:10;box-shadow:0 2px 6px rgba(0,0,0,.15);position:sticky}
+.topbar-title{font-size:18px;font-weight:800;text-align:center}
+.search-bar{background:#fff;border:none;border-radius:20px;padding:9px 14px;margin-top:10px;font-size:13px;color:#333;width:100%;outline:none}
+
+.lang-btn{position:absolute;top:14px;right:14px;background:rgba(255,255,255,.2);border:none;color:#fff;font-size:18px;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:20}
+.lang-panel{position:fixed;top:0;right:0;height:100%;width:78%;max-width:300px;background:#fff;box-shadow:-3px 0 12px rgba(0,0,0,.2);z-index:100;transform:translateX(100%);transition:transform .25s;overflow-y:auto}
+.lang-panel.open{transform:translateX(0)}
+.lang-panel-header{background:#e2136e;color:#fff;padding:16px;font-weight:800;font-size:15px;display:flex;justify-content:space-between;align-items:center}
+.lang-item{display:flex;align-items:center;gap:10px;padding:13px 16px;font-size:14px;color:#333;border-bottom:1px solid #f0f0f0}
+.lang-item span.flag{font-size:20px}
+.lang-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:90;display:none}
+.lang-overlay.open{display:block}
+#google_translate_element{position:absolute;left:-9999px;top:-9999px;height:1px;overflow:hidden}
+.goog-te-banner-frame{display:none !important}
+body{top:0 !important}
+
+.chip-row{display:flex;overflow-x:auto;gap:8px;padding:10px 12px;background:#fff;border-bottom:1px solid #eee;-webkit-overflow-scrolling:touch}
+.chip-row::-webkit-scrollbar{display:none}
+.chip{flex:0 0 auto;font-size:11.5px;font-weight:700;padding:8px 13px;border-radius:16px;white-space:nowrap;border:none;box-shadow:0 1px 3px rgba(0,0,0,.1);cursor:pointer}
+.chip.active{box-shadow:0 2px 6px rgba(226,19,110,.4)}
+
+.section-title{font-size:14px;font-weight:700;padding:14px 14px 8px;color:#333}
+
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 10px}
+.product-card{background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.08);position:relative}
+.product-img{background:#fff5f8;height:80px;display:flex;align-items:center;justify-content:center;font-size:34px}
+.badge-corner{position:absolute;top:6px;left:6px;background:#ff6a00;color:#fff;font-size:9px;padding:2px 6px;border-radius:3px;font-weight:700}
+.product-body{padding:8px 9px 10px}
+.product-title{font-size:12.5px;font-weight:600;line-height:1.3;min-height:32px}
+.rating{font-size:9.5px;color:#ffa41c;margin:4px 0}
+.rating span{color:#888}
+.price-row{display:flex;align-items:baseline;gap:5px;margin-bottom:4px}
+.price-now{font-size:16px;font-weight:800;color:#e2136e}
+.price-old{font-size:11px;color:#999;text-decoration:line-through}
+.discount{font-size:10px;color:#00a854;font-weight:700}
+.pkg-line{font-size:10.5px;color:#666;margin-bottom:6px}
+.buy-btn{display:block;text-align:center;background:#ff6a00;color:#fff;font-size:11.5px;font-weight:700;padding:7px;border-radius:5px;text-decoration:none;margin-bottom:5px}
+.buy-btn-alt{display:block;text-align:center;background:#fff;color:#e2136e;font-size:10.5px;font-weight:700;padding:6px;border-radius:5px;text-decoration:none;border:1px solid #e2136e;margin-bottom:5px}
+.buy-btn-free{display:block;text-align:center;background:#fff;color:#00a854;font-size:10.5px;font-weight:700;padding:6px;border-radius:5px;text-decoration:none;border:1px solid #00a854;margin-bottom:5px}
+.soon-badge{position:absolute;top:6px;left:6px;background:#9e9e9e;color:#fff;font-size:9px;padding:2px 6px;border-radius:3px;font-weight:700}
+.soon-card .product-img{filter:grayscale(100%);opacity:.5}
+.soon-text{text-align:center;color:#999;font-size:11px;font-weight:700;padding:8px 4px;background:#f5f5f5;border-radius:5px;margin-top:6px}
+.no-result{text-align:center;color:#999;font-size:13px;padding:30px 0;display:none}
+.loading{text-align:center;color:#999;font-size:13px;padding:30px 0}
+</style></head>
+<body>
+
+<div class="topbar">
+  <button class="lang-btn" onclick="toggleLangPanel()">🌐</button>
+  <div class="topbar-title">JFT & SSW MODELS QUESTIONS</div>
+  <input class="search-bar" id="searchBox" placeholder="🔍 ক্যাটাগরির নাম লিখুন..." oninput="searchCat(this.value)">
+</div>
+
+<div class="lang-overlay" id="langOverlay" onclick="toggleLangPanel()"></div>
+<div class="lang-panel" id="langPanel">
+  <div class="lang-panel-header">
+    <span>ভাষা / দেশ বেছে নিন</span>
+    <span onclick="toggleLangPanel()" style="cursor:pointer">✕</span>
+  </div>
+  <div id="langList"></div>
+</div>
+
+<div id="google_translate_element"></div>
+
+<div class="chip-row" id="chipRow"></div>
+
+<div class="section-title" id="sectionTitle">সব ক্যাটাগরি</div>
+
+<div class="grid" id="grid">
+  <div class="loading">লোড হচ্ছে...</div>
+</div>
+<div class="no-result" id="noResult">কোনো ফলাফল পাওয়া যায়নি</div>
+
+<script>
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwFrn7snUsHz43RBpIxO2gYHoLU018ntEoWdnevqOcE2AiH0dnqCjnnXNzFvW0PT1vP/exec";
+
+const BKASH_NUMBER = "01618530650";
+const CONTACT_NUMBER = "01410530650";
+const WHATSAPP_NUMBER = "8801410530650";
+const FREE_LOGIN_URL_BY_CATEGORY = {
+  "Agriculture (Crop Farming)": "https://sswjftmocktest.github.io/agri-mock-test/",
+  "Agriculture (Livestock Farming)": "https://script.google.com/macros/s/AKfycbwa1_1HdHpakPjiHC3jDmd2_rUJ2pdraOnyphUh4S5WQ0_O78wsMNOQXfvefiuLKY54Pw/exec"
+};
+
+const CATEGORY_STYLE = {
+  "JFT Basic": { emoji: "📘", color: "#1565c0" },
+  "Agriculture (Crop Farming)": { emoji: "🌾", color: "#2e7d32" },
+  "Agriculture (Livestock Farming)": { emoji: "🐄", color: "#e65100" },
+  "Nursing Care (Japanese)": { emoji: "🏥", color: "#c2185b" },
+  "Nursing Care (Bangla)": { emoji: "💊", color: "#7b1fa2" },
+  "Construction (Building)": { emoji: "🏗️", color: "#00695c" },
+  "Construction (Civil)": { emoji: "🧱", color: "#f57f17" },
+  "Construction (Life Line)": { emoji: "🔧", color: "#4e342e" },
+  "Automobile Maintenance": { emoji: "🚗", color: "#0277bd" },
+  "Truck Driver": { emoji: "🚚", color: "#d84315" },
+  "Aviation": { emoji: "✈️", color: "#283593" },
+  "Food and Beverage Manufacturing": { emoji: "🍱", color: "#558b2f" },
+  "EPS Topic": { emoji: "📄", color: "#37474f" }
+};
+const DEFAULT_STYLE = { emoji: "📝", color: "#616161" };
+
+const COUNTRIES = [
+  { flag: "🇧🇩", name: "Bangladesh", lang: "bn" },
+  { flag: "🇵🇭", name: "Philippines", lang: "tl" },
+  { flag: "🇻🇳", name: "Vietnam", lang: "vi" },
+  { flag: "🇮🇩", name: "Indonesia", lang: "id" },
+  { flag: "🇳🇵", name: "Nepal", lang: "ne" },
+  { flag: "🇱🇰", name: "Sri Lanka", lang: "si" },
+  { flag: "🇮🇳", name: "India", lang: "hi" },
+  { flag: "🇵🇰", name: "Pakistan", lang: "ur" },
+  { flag: "🇰🇭", name: "Cambodia", lang: "km" },
+  { flag: "🇲🇲", name: "Myanmar", lang: "my" },
+  { flag: "🇹🇭", name: "Thailand", lang: "th" },
+  { flag: "🇲🇳", name: "Mongolia", lang: "mn" },
+  { flag: "🇺🇿", name: "Uzbekistan", lang: "uz" },
+  { flag: "🇲🇾", name: "Malaysia", lang: "ms" },
+  { flag: "🇱🇦", name: "Laos", lang: "lo" },
+  { flag: "🇰🇬", name: "Kyrgyzstan", lang: "ky" }
+];
+
+function renderLangList() {
+  const list = document.getElementById('langList');
+  list.innerHTML = COUNTRIES.map(c =>
+    `<div class="lang-item" onclick="changeLanguage('${c.lang}')"><span class="flag">${c.flag}</span> ${c.name}</div>`
+  ).join('');
+}
+function toggleLangPanel() {
+  document.getElementById('langPanel').classList.toggle('open');
+  document.getElementById('langOverlay').classList.toggle('open');
+}
+function changeLanguage(lang) {
+  const trySelect = (attemptsLeft) => {
+    const select = document.querySelector('#google_translate_element select.goog-te-combo');
+    if (select) {
+      select.value = lang;
+      select.dispatchEvent(new Event('change'));
+      toggleLangPanel();
+    } else if (attemptsLeft > 0) {
+      setTimeout(() => trySelect(attemptsLeft - 1), 400);
+    } else {
+      alert('অনুবাদ সিস্টেম লোড হতে পারেনি। ইন্টারনেট চেক করে আবার চেষ্টা করুন।');
+    }
+  };
+  trySelect(10);
+}
+renderLangList();
+
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({
+    pageLanguage: 'bn',
+    includedLanguages: 'bn,tl,vi,id,ne,si,hi,ur,km,my,th,mn,uz,ms,lo,ky',
+    autoDisplay: false
+  }, 'google_translate_element');
+}
+
+let allProducts = [];
+let currentFilter = "all";
+let isSearchMode = false;
+
+function parseCategory(raw) {
+  const trimmed = String(raw).trim();
+  const match = trimmed.match(/^(\p{Extended_Pictographic}\uFE0F?)\s*(.*)$/u);
+  if (match && match[2]) {
+    return { emoji: match[1], name: match[2].trim() };
+  }
+  return { emoji: null, name: trimmed };
+}
+
+function getStyle(cleanName) {
+  for (const key in CATEGORY_STYLE) {
+    if (cleanName.includes(key) || key.includes(cleanName)) return CATEGORY_STYLE[key];
+  }
+  return DEFAULT_STYLE;
+}
+
+function buildMessage(category, setName, price) {
+  return (
+    `আমি ${category} (${setName}) কিনতে চাই।\n` +
+    `দাম: ৳${price}\n\n` +
+    `bKash / Nagad Send Money নম্বর: ${BKASH_NUMBER}\n` +
+    `টাকা পাঠিয়ে TrxID এই নম্বরেই পাঠান।\n\n` +
+    `প্রিয় শিক্ষার্থী,\n\n` +
+    `আপনার *পেমেন্ট চেকিং* চলছে। খুব শীঘ্রই আপনার *ID ও Password* পাঠিয়ে দেওয়া হবে।\n\n` +
+    `সার্ভার সমস্যার কারণে ID ও Password পেতে কিছুটা দেরি হতে পারে। অনুগ্রহ করে *রাত ৮:০০টা পর্যন্ত অপেক্ষা করুন।*\n\n` +
+    `যদি *রাত ৮:০০টার পরেও* SMS না পান, তাহলে যোগাযোগ করুন:\n` +
+    `📞 ${CONTACT_NUMBER}`
+  );
+}
+function buildFreeMessage(category, setName) {
+  return (
+    `আমি ${category} (${setName}) ফ্রি ট্রায়াল নিতে চাই।\n\n` +
+    `আমাকে ID/Password পাঠিয়ে দিন।\n` +
+    `সমস্যা হলে এই নম্বরে SMS/Call করুন: ${CONTACT_NUMBER}`
+  );
+}
+function buildWaLink(category, setName, price) {
+  const isFree = price === 0;
+  const msg = isFree ? buildFreeMessage(category, setName) : buildMessage(category, setName, price);
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+}
+
+async function loadProducts() {
+  try {
+    const res = await fetch(APPS_SCRIPT_URL);
+    const data = await res.json();
+    allProducts = data.products || [];
+    renderChips();
+    renderGrid();
+  } catch (err) {
+    document.getElementById('grid').innerHTML =
+      '<div class="loading">⚠️ ডেটা লোড করা যায়নি। ইন্টারনেট চেক করুন বা পরে আবার চেষ্টা করুন।</div>';
+  }
+}
+
+function renderChips() {
+  const cats = [...new Set(allProducts.map(p => p.category))];
+  const chipRow = document.getElementById('chipRow');
+  let html = `<div class="chip active" data-cat="all" style="background:#e2136e;color:#fff" onclick="filterCat(this,'all')">🗂️ সব</div>`;
+  cats.forEach(cat => {
+    const parsed = parseCategory(cat);
+    const st = getStyle(parsed.name);
+    const displayEmoji = parsed.emoji || st.emoji;
+    html += `<div class="chip" data-cat="${cat}" data-active-bg="${st.color}" style="background:#f0f0f0;color:${st.color}" onclick="filterCat(this,'${cat.replace(/'/g,"\\'")}')">${displayEmoji} ${parsed.name}</div>`;
+  });
+  chipRow.innerHTML = html;
+}
+
+function clearActive() {
+  document.querySelectorAll('.chip').forEach(c => {
+    c.classList.remove('active');
+    c.style.background = '#f0f0f0';
+    c.style.color = c.dataset.activeBg || '#e2136e';
+  });
+  const allChip = document.querySelector('.chip[data-cat="all"]');
+  allChip.style.background = '#f0f0f0';
+  allChip.style.color = '#e2136e';
+}
+function activateChip(el) {
+  el.classList.add('active');
+  el.style.background = el.dataset.activeBg || '#e2136e';
+  el.style.color = '#fff';
+}
+function filterCat(el, cat) {
+  clearActive();
+  activateChip(el);
+  document.getElementById('searchBox').value = (cat === 'all') ? '' : cat;
+  currentFilter = cat;
+  isSearchMode = false;
+  document.getElementById('sectionTitle').innerText = (cat === 'all') ? 'সব ক্যাটাগরি' : parseCategory(cat).name;
+  renderGrid();
+}
+function searchCat(value) {
+  const v = value.trim();
+  clearActive();
+  if (v === '') {
+    activateChip(document.querySelector('.chip[data-cat="all"]'));
+    currentFilter = 'all'; isSearchMode = false;
+    document.getElementById('sectionTitle').innerText = 'সব ক্যাটাগরি';
+    renderGrid();
+    return;
+  }
+  let matched = null;
+  document.querySelectorAll('.chip').forEach(c => {
+    if (c.dataset.cat.toLowerCase().includes(v.toLowerCase())) matched = c;
+  });
+  if (matched) activateChip(matched);
+  currentFilter = v; isSearchMode = true;
+  document.getElementById('sectionTitle').innerText = 'ফলাফল: ' + v;
+  renderGrid();
+}
+
+function renderGrid() {
+  const grid = document.getElementById('grid');
+  const cats = [...new Set(allProducts.map(p => p.category))];
+  let visibleCats = cats;
+  if (currentFilter !== 'all') {
+    visibleCats = isSearchMode
+      ? cats.filter(c => c.toLowerCase().includes(currentFilter.toLowerCase()))
+      : cats.filter(c => c === currentFilter);
+  }
+
+  if (visibleCats.length === 0) {
+    grid.innerHTML = '';
+    document.getElementById('noResult').style.display = 'block';
+    return;
+  }
+  document.getElementById('noResult').style.display = 'none';
+
+  let html = '';
+  visibleCats.forEach(cat => {
+    const sets = allProducts.filter(p => p.category === cat);
+    if (sets.length === 0) return;
+    const parsed = parseCategory(cat);
+    const st = getStyle(parsed.name);
+    const displayEmoji = parsed.emoji || st.emoji;
+
+    const isComingSoon = sets.every(s => s.status === "Coming Soon");
+    if (isComingSoon) {
+      html += `
+        <div class="product-card soon-card" data-cat="${cat}">
+          <div class="product-img">${displayEmoji}</div>
+          <div class="soon-badge">শীঘ্রই আসছে</div>
+          <div class="product-body">
+            <div class="product-title">${parsed.name}</div>
+            <div class="rating">⭐⭐⭐⭐⭐ <span>(SSW Approved)</span></div>
+            <div class="soon-text">🔜 শীঘ্রই আসছে</div>
+          </div>
+        </div>`;
+      return;
+    }
+
+    const freeSets = sets.filter(s => s.discountPrice === 0);
+    const paidSets = sets.filter(s => s.discountPrice > 0);
+    const orderedSets = [...freeSets, ...paidSets];
+
+    orderedSets.forEach(s => {
+      const isFree = s.discountPrice === 0;
+      const currentPrice = isFree ? 0 : Math.min(s.netPrice, s.discountPrice);
+      const oldPrice = Math.max(s.netPrice, s.discountPrice);
+      const discPct = (!isFree && oldPrice > currentPrice)
+        ? Math.round(100 - (currentPrice / oldPrice) * 100) : 0;
+      const link = isFree
+        ? (FREE_LOGIN_URL_BY_CATEGORY[parsed.name] || buildWaLink(parsed.name, s.setName, 0))
+        : buildWaLink(parsed.name, s.setName, currentPrice);
+
+      html += `
+        <div class="product-card" data-cat="${cat}">
+          <div class="product-img">${displayEmoji}</div>
+          <div class="badge-corner">${isFree ? '🎁 ফ্রি' : '🔥 জনপ্রিয়'}</div>
+          <div class="product-body">
+            <div class="product-title">${parsed.name}</div>
+            <div class="rating">⭐⭐⭐⭐⭐ <span>(SSW Approved)</span></div>
+            <div class="price-row">
+              <span class="price-now">${isFree ? 'ফ্রি' : '৳' + currentPrice}</span>
+              ${(!isFree && oldPrice > currentPrice) ? `<span class="price-old">৳${oldPrice}</span><span class="discount">-${discPct}%</span>` : ''}
+            </div>
+            <div class="pkg-line">${s.setName}${s.dayLimit ? ' · ' + s.dayLimit + ' দিন মেয়াদ' : ''}</div>
+            <a class="${isFree ? 'buy-btn-free' : 'buy-btn'}" href="${link}" target="_blank">${isFree ? '🎁 ফ্রি ট্রায়াল — সরাসরি লগইন করুন' : '🛒 এখনই অর্ডার করুন'}</a>
+          </div>
+        </div>`;
+    });
+  });
+
+  grid.innerHTML = html;
+}
+
+loadProducts();
+</script>
+
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+</body></html>
