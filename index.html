@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="bn"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -86,6 +87,7 @@ const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwFrn7snUsHz43R
 const BKASH_NUMBER = "01618530650";
 const CONTACT_NUMBER = "01410530650";
 const WHATSAPP_NUMBER = "8801410530650";
+const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLScoOS8vGPCK7mgwqQKWzTrMUj1Jo9D8itRFY-z5xtBkVAgUXg/viewform";
 const FREE_LOGIN_URL_BY_CATEGORY = {
   "Agriculture (Crop Farming)": "https://sswjftmocktest.github.io/agri-mock-test/",
   "Agriculture (Livestock Farming)": "https://script.google.com/macros/s/AKfycbwa1_1HdHpakPjiHC3jDmd2_rUJ2pdraOnyphUh4S5WQ0_O78wsMNOQXfvefiuLKY54Pw/exec"
@@ -187,7 +189,8 @@ function buildMessage(category, setName, price) {
     `আমি ${category} (${setName}) কিনতে চাই।\n` +
     `দাম: ৳${price}\n\n` +
     `bKash / Nagad Send Money নম্বর: ${BKASH_NUMBER}\n` +
-    `টাকা পাঠিয়ে TrxID এই নম্বরেই পাঠান।\n\n` +
+    `টাকা পাঠিয়ে TrxID পাঠানোর জন্য এই ফর্মটি পূরণ করুন:\n` +
+    `${FORM_URL}\n\n` +
     `প্রিয় শিক্ষার্থী,\n\n` +
     `আপনার *পেমেন্ট চেকিং* চলছে। খুব শীঘ্রই আপনার *ID ও Password* পাঠিয়ে দেওয়া হবে।\n\n` +
     `সার্ভার সমস্যার কারণে ID ও Password পেতে কিছুটা দেরি হতে পারে। অনুগ্রহ করে *রাত ৮:০০টা পর্যন্ত অপেক্ষা করুন।*\n\n` +
