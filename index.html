@@ -318,8 +318,10 @@ function renderGrid() {
       return;
     }
 
-    const freeSets = sets.filter(s => s.discountPrice === 0);
-    const paidSets = sets.filter(s => s.discountPrice > 0);
+    // Only Active sets get real order cards
+    const activeSets = sets.filter(s => s.status !== "Coming Soon");
+    const freeSets = activeSets.filter(s => s.discountPrice === 0);
+    const paidSets = activeSets.filter(s => s.discountPrice > 0);
     const orderedSets = [...freeSets, ...paidSets];
 
     orderedSets.forEach(s => {
@@ -345,6 +347,22 @@ function renderGrid() {
             </div>
             <div class="pkg-line">${s.setName}${s.dayLimit ? ' · ' + s.dayLimit + ' দিন মেয়াদ' : ''}</div>
             <a class="${isFree ? 'buy-btn-free' : 'buy-btn'}" href="${link}" target="_blank">${isFree ? '🎁 ফ্রি ট্রায়াল — সরাসরি লগইন করুন' : '🛒 এখনই অর্ডার করুন'}</a>
+          </div>
+        </div>`;
+    });
+
+    // Sets within this category that are individually Coming Soon (e.g. Super-4Set)
+    const soonSets = sets.filter(s => s.status === "Coming Soon");
+    soonSets.forEach(s => {
+      html += `
+        <div class="product-card soon-card" data-cat="${cat}">
+          <div class="product-img">${displayEmoji}</div>
+          <div class="soon-badge">শীঘ্রই আসছে</div>
+          <div class="product-body">
+            <div class="product-title">${parsed.name}</div>
+            <div class="rating">⭐⭐⭐⭐⭐ <span>(SSW Approved)</span></div>
+            <div class="pkg-line">${s.setName}</div>
+            <div class="soon-text">🔜 শীঘ্রই আসছে</div>
           </div>
         </div>`;
     });
